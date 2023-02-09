@@ -116,10 +116,10 @@ public class LoginService {
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+            String name = properties.getAsJsonObject().get("nickname").getAsString();
 //            String email = kakao_account.getAsJsonObject().get("email").getAsString();
 
-            userInfo.put("nickname", nickname);
+            userInfo.put("name", name);
 //            userInfo.put("email", email);
 
         } catch (IOException e) {
@@ -132,7 +132,7 @@ public class LoginService {
     public String getUserInfoNaver(String access_token) {
         String token = access_token;
         String header = "Bearer " + token;
-        String nickname = "";
+        String name = "";
         try {
             String apiURL = "https://openapi.naver.com/v1/nid/me";
             URL url = new URL(apiURL);
@@ -163,15 +163,15 @@ public class LoginService {
 
             JsonObject properties = element.getAsJsonObject().get("response").getAsJsonObject();
 
-            nickname = properties.getAsJsonObject().get("name").getAsString();
-            log.info("nickname : " + nickname);
+            name = properties.getAsJsonObject().get("name").getAsString();
+            log.info("name : " + name);
 
             br.close();
             System.out.println(response.toString());
         } catch (Exception e) {
             System.out.println(e);
         }
-        return nickname;
+        return name;
     }
 
     // Google Token

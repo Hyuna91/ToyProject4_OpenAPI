@@ -43,7 +43,7 @@
 
 <div class="form-group" id="address-box">
     <form name="form" id="form"method="post">
-        <h4 id="loginUser"><b style="color: mediumblue">${nickname}</b>님 로그인 완료</h4>
+        <h4 id="loginUser"><b style="color: mediumblue">${name}</b>님 로그인 완료</h4>
         <hr>
         <h1>주소 API</h1>
 

@@ -26,7 +26,7 @@ public class LoginController {
     private LoginService ls;
 
     // Login 첫 화면
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/login")
     public String login() {
         return "/login"; };
 
@@ -42,26 +42,11 @@ public class LoginController {
 
         HashMap<String, Object> userInfo = ls.getUserInfo(access_Token);
 
-        String nickname = (String) userInfo.get("nickname");
+        String name = "카카오 - " + (String) userInfo.get("name");
 
-        String name = "카카오 - " + nickname;
-//        System.out.println("###access_Token#### : " + access_Token);
-//        System.out.println("###nickname#### : " + userInfo.get("nickname"));
-//        System.out.println("###email#### : " + userInfo.get("email"));
-
-        model.addAttribute("nickname", name);
+        model.addAttribute("name", name);
 
         return "/BackSampleXml"; };
-//        return "/afterLogin"; };
-
-    // Kakao Logout
-//    @RequestMapping(value="/logout")
-//    public String logout(HttpSession session) {
-//        kakao.kakaoLogout((String)session.getAttribute("access_Token"));
-//        session.removeAttribute("access_Token");
-//        session.removeAttribute("userId");
-//        return "index";
-//    }
 
     // Naver Login
     @RequestMapping(value = "/AfterloginNaver")
@@ -70,7 +55,7 @@ public class LoginController {
         String clientSecret = "Ku0kyXmbCc";//애플리케이션 클라이언트 시크릿값";
         String code = request.getParameter("code");
         String state = request.getParameter("state");
-        String nickname = "";
+        String name = "";
 
         String redirectURI = URLEncoder.encode("http://localhost:8080/AfterloginNaver", "UTF-8");
         String apiURL;
@@ -121,9 +106,8 @@ public class LoginController {
             return "/afterLogin";
         }
 
-        nickname = ls.getUserInfoNaver(access_token);
-        String name = "네이버 - " + nickname;
-        model.addAttribute("nickname", name);
+        name = "네이버 - " + (String)ls.getUserInfoNaver(access_token);
+        model.addAttribute("name", name);
 
         return "/BackSampleXml";
     }
@@ -150,7 +134,8 @@ public class LoginController {
 //        log.info("accessToken : " + access_Token);
         log.info("name : " + name);
 
-        model.addAttribute("nickname", name);
+        model.addAttribute("name", name);
         return "/BackSampleXml";
+//        return "redirect:/BackSampleXml";
     }
 }

@@ -2,30 +2,21 @@ package com.example.openapi.controller;
 
 import com.example.openapi.service.LoginService;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.SecureRandom;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @Slf4j
@@ -52,12 +43,13 @@ public class LoginController {
         HashMap<String, Object> userInfo = ls.getUserInfo(access_Token);
 
         String nickname = (String) userInfo.get("nickname");
-        log.info("nickname : " + nickname);
+
+        String name = "카카오 - " + nickname;
 //        System.out.println("###access_Token#### : " + access_Token);
 //        System.out.println("###nickname#### : " + userInfo.get("nickname"));
 //        System.out.println("###email#### : " + userInfo.get("email"));
 
-        model.addAttribute("nickname", nickname);
+        model.addAttribute("nickname", name);
 
         return "/BackSampleXml"; };
 //        return "/afterLogin"; };
@@ -130,7 +122,8 @@ public class LoginController {
         }
 
         nickname = ls.getUserInfoNaver(access_token);
-        model.addAttribute("nickname", nickname);
+        String name = "네이버 - " + nickname;
+        model.addAttribute("nickname", name);
 
         return "/BackSampleXml";
     }

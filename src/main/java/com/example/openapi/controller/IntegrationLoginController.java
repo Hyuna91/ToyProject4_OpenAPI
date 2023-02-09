@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @Slf4j
 public class IntegrationLoginController {
+    // 새로고침 시에도 access_Token을 유지할 수 있도록 멤버변수로 지정 
+    private String access_Token ="";
 
     @Autowired
     private IntegrationLoginService ils;
@@ -36,7 +38,12 @@ public class IntegrationLoginController {
         int codeLen = code.length();
 
         // Login을 통해 획득한 authorize Code를 access Token를 받아오기 위해 보낸다.
-        String access_Token = ils.getAccessToken(code, state);
+        try {
+            access_Token = ils.getAccessToken(code, state);
+        } catch (Exception e) {
+            log.info(String.valueOf(e));
+        }
+
         log.info(access_Token);
 
         // Login한 Server 표시
@@ -52,6 +59,4 @@ public class IntegrationLoginController {
 
         return "/BackSampleXml";
     }
-
-
 }

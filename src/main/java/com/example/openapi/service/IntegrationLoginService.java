@@ -14,10 +14,10 @@ import java.net.URLEncoder;
 @Service
 @Slf4j
 public class IntegrationLoginService {
+    // 새로고침 시에도 access_Token을 유지할 수 있도록 멤버변수로 지정
+    String access_Token = "";
 
     public String getAccessToken(String authorize_code, String state) throws Exception {
-        String access_Token = "";
-        String refresh_Token = "";
         String reqURL = "";
         String clientId = "";   // 본인이 발급받은 key
         String clientSecret = "";   // 본인이 발급받은 key의 비밀번호(노출하면 안됨)
@@ -56,7 +56,7 @@ public class IntegrationLoginService {
                 sb.append("&redirect_uri=" + redirectURI);
                 sb.append("&code=" + authorize_code);
 
-            // Naver Login
+                // Naver Login
             } else if (codeLen == 18) {
                 clientId = "8Z037cpOMLJbG8tl0BSu";
                 clientSecret = "Ku0kyXmbCc";
@@ -67,7 +67,7 @@ public class IntegrationLoginService {
                 sb.append("&code=" + authorize_code);
                 sb.append("&state=" + state);
 
-            // Google Login
+                // Google Login
             } else if (codeLen == 73) {
                 clientId = "175958294391-mhl3hcs6a4v773jnvf294d00vvqtnn2h.apps.googleusercontent.com";
                 clientSecret = "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";
@@ -83,8 +83,8 @@ public class IntegrationLoginService {
             bw.flush();
 
             // 결과 코드가 200이라면 성공
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+//            int responseCode = conn.getResponseCode();
+//            System.out.println("responseCode : " + responseCode);
 
             // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -106,7 +106,6 @@ public class IntegrationLoginService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return access_Token;
     }
 
@@ -122,11 +121,11 @@ public class IntegrationLoginService {
             if (codeLen == 86) {
                 reqURL = "https://kapi.kakao.com/v2/user/me";
 
-            // Naver UserInfo
+                // Naver UserInfo
             } else if (codeLen == 18) {
                 reqURL = "https://openapi.naver.com/v1/nid/me";
 
-            // Google UserInfo
+                // Google UserInfo
             } else if (codeLen == 73) {
                 reqURL = "https://www.googleapis.com/userinfo/v2/me?access_token=" + access_Token;
             }
@@ -172,8 +171,6 @@ public class IntegrationLoginService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return name;
     }
-
 }

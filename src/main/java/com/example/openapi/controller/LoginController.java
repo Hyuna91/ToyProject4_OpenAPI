@@ -30,23 +30,23 @@ public class LoginController {
     public String login() {
         return "/login"; };
 
+    String access_Token= "";
 
     // Kakao Login
     @RequestMapping(value = "/AfterloginKakao")
     public String afterLoginKakao(@RequestParam(value = "code", required = false) String code, Model model) throws Exception{
-        // 인증 코드 받아오기
-        log.info("code : " + code); // xAsb0VDasYcz2GywHjYtHiHQcmM8sbZsngi59I-Y7cWwtEh0M0WcolM1auQzXKK7o3Dnhgo9cxcAAAGGJVdW1Q
-
         // code를 보내서 access_Token 얻기
-        String access_Token = ls.getAccessToken(code);
+        access_Token = ls.getAccessTokenKakao(code);
+        String name = "";
+        try {
+            name = "카카오 - " + (String)ls.getUserInfo(access_Token);
+        } catch (Exception e) {
 
-        HashMap<String, Object> userInfo = ls.getUserInfo(access_Token);
-
-        String name = "카카오 - " + (String) userInfo.get("name");
-
+        }
         model.addAttribute("name", name);
 
-        return "/BackSampleXml"; };
+        return "/BackSampleXml";
+    }
 
     // Naver Login
     @RequestMapping(value = "/AfterloginNaver")
@@ -65,8 +65,6 @@ public class LoginController {
         apiURL += "&redirect_uri=" + redirectURI;
         apiURL += "&code=" + code;
         apiURL += "&state=" + state;
-        String access_token = "";
-        String refresh_token = "";
         try {
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -91,11 +89,9 @@ public class LoginController {
             JsonElement element = parser.parse(result);
 
 
-            access_token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_token = element.getAsJsonObject().get("refresh_token").getAsString();
+            access_Token = element.getAsJsonObject().get("access_token").getAsString();
 
-            log.info("access_token : " + access_token);
-            log.info("refresh_token : " + refresh_token);
+            log.info("access_token : " + access_Token);
 
             br.close();
             if(responseCode==200) {
@@ -106,7 +102,7 @@ public class LoginController {
             return "/afterLogin";
         }
 
-        name = "네이버 - " + (String)ls.getUserInfoNaver(access_token);
+        name = "네이버 - " + (String)ls.getUserInfoNaver(access_Token);
         model.addAttribute("name", name);
 
         return "/BackSampleXml";
@@ -126,7 +122,7 @@ public class LoginController {
         String clientSecret = "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";
         String redirectUrl = "http://localhost:8080/AfterloginGoogle";
 
-        String access_Token = ls.getGoogleToken(code);
+        access_Token = ls.getGoogleToken(code);
 
         String name1 = ls.getGoogleUserInfo(access_Token);
         String name = "구글 - " + name1;

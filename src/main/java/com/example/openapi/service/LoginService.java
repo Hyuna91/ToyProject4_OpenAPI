@@ -24,11 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 @Slf4j
 public class LoginService {
+    String access_Token = "";
 
-    // accessToken을 받기 위한 메서드
-    public String getAccessToken(String authorize_code) {
-        String access_Token = "";
-        String refresh_Token = "";
+    public String getAccessTokenKakao(String authorize_code) {
+        access_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
         try {
@@ -44,17 +43,15 @@ public class LoginService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuffer sb = new StringBuffer();
             sb.append("grant_type=authorization_code");
-
             sb.append("&client_id=2270f6337814fd5b2aa1f569bb282d8e"); //본인이 발급받은 key
             sb.append("&redirect_uri=http://localhost:8080/AfterloginKakao"); // 본인이 설정한 주소
-
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
             bw.flush();
 
             // 결과 코드가 200이라면 성공
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+//            int responseCode = conn.getResponseCode();
+//            System.out.println("responseCode : " + responseCode);
 
             // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -71,10 +68,6 @@ public class LoginService {
             JsonElement element = parser.parse(result);
 
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
-
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
 
             br.close();
             bw.close();
@@ -84,11 +77,10 @@ public class LoginService {
         return access_Token;
     }
 
-    public HashMap<String, Object> getUserInfo(String access_Token) {
-
+    public String getUserInfo(String access_Token) throws Exception{
         // 요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
-        HashMap<String, Object> userInfo = new HashMap<String, Object>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
+        String name = "";
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -97,8 +89,8 @@ public class LoginService {
             // 요청에 필요한 Header에 포함될 내용
             conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+//            int responseCode = conn.getResponseCode();
+//            System.out.println("responseCode : " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -108,30 +100,24 @@ public class LoginService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
-            JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            String name = properties.getAsJsonObject().get("nickname").getAsString();
-//            String email = kakao_account.getAsJsonObject().get("email").getAsString();
-
-            userInfo.put("name", name);
-//            userInfo.put("email", email);
+            name = properties.getAsJsonObject().get("nickname").getAsString();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return userInfo;
+
+        return name;
     }
 
     // Naver UserInfo 받아오기
-    public String getUserInfoNaver(String access_token) {
-        String token = access_token;
-        String header = "Bearer " + token;
+    public String getUserInfoNaver(String access_Token) {
+        String header = "Bearer " + access_Token;
         String name = "";
         try {
             String apiURL = "https://openapi.naver.com/v1/nid/me";
@@ -177,8 +163,8 @@ public class LoginService {
     // Google Token
     public String getGoogleToken(String getCode){
         // Access Token 받아오기
-        String access_Token = "";
-        String refresh_Token = "";
+//        String access_Token = "";
+//        String refresh_Token = "";
 
         String apiURL = "https://www.googleapis.com/oauth2/v4/token";
 //        String reqURL = "https://accounts.google.com/o/oauth2/auth";

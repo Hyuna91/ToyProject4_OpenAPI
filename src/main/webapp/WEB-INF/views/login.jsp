@@ -19,15 +19,12 @@
     <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
     <%-- Google Login --%>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
     <style>
         body {
             margin: 0 auto;
         }
         #login-box {
-            /*width: 13%;*/
             width: 237px;
-
             margin: 50px;
         }
         #exampleInputPassword1 {
@@ -38,15 +35,11 @@
             background-repeat: no-repeat;
             background-size : cover;
             margin: 10px auto;
-            /*margin: 10px 65px;*/
-            /* padding: -10px; */
             width: 237px;
             height: 50px;
             display: inline-block;
         }
         .naver_btn{
-            /*margin: 10px auto;*/
-            /* padding: -10px; */
             color: transparent;
             width: 300px;
             height: 60px;
@@ -89,7 +82,6 @@
                     + "&redirect_uri=" + redirectURI
                     + "&state=" + state;
             session.setAttribute("state", state);
-//                System.out.println("state : " + state); // 255849927828952095556601748959154492328
         %>
         <div class="naver_btn">
             <a href="<%=apiURL%>"><img height="50" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99580C465C3D7D130C"/></a>
@@ -110,17 +102,6 @@
         <div class="google_btn">
             <a href="<%=apiURL_google%>"><img height="50" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F998689465C3D7D1217"/></a>
         </div>
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
-        <script>
-            window.onload = function () {
-                google.accounts.id.initialize({
-                    client_id: '175958294391-mhl3hcs6a4v773jnvf294d00vvqtnn2h.apps.googleusercontent.com',
-                    callback: "http://localhost:8080/AfterloginGoogle"
-                });
-                google.accounts.id.prompt();
-            };
-        </script>
-
     </form>
 </div>
 </body>

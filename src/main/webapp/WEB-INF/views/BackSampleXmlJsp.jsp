@@ -62,7 +62,7 @@
                 url :"getAddrApiXmlJsp",
                 type:"post",
                 data:$("#form").serialize(),
-                dataType:"text",
+                dataType:"html",
                     success:function(htmlStr){
                         if(htmlStr != null){
                             makeList(htmlStr);
@@ -117,7 +117,6 @@
                 event.keyCode = 0;
                 getAddrLoc();
             }
-
         }
 
         // 카카오 지도 메서드

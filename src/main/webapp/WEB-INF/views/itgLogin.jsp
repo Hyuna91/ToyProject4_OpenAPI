@@ -19,22 +19,18 @@
     <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
     <%-- Google Login --%>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
     <style>
         body {
             margin: 0 auto;
         }
         #login-box {
-            /*width: 13%;*/
             width: 237px;
-
             margin: 50px;
         }
         #exampleInputPassword1 {
             margin-bottom: 50px;
         }
         .kakao_btn, .naver_btn, .google_btn{
-            /*width: 300px;*/
             height: 50px;
         }
     </style>
@@ -81,7 +77,6 @@
                 let apiURL = "";
                 if (server == "kakao") {
                     clientId = "2270f6337814fd5b2aa1f569bb282d8e";
-                    // redirectURI = encodeURI("http://localhost:8080/AfterloginKakao");
                     apiURL = "https://kauth.kakao.com/oauth/authorize"
                         + "?client_id=" + clientId
                         + "&redirect_uri=" + redirectURI
@@ -91,7 +86,6 @@
                     // Navar Login을 위해 getSecureRandom 함수 값이 필요함
                     let state = getSecureRandom();
                     clientId = "8Z037cpOMLJbG8tl0BSu";
-                    // redirectURI = encodeURI("http://localhost:8080/AfterloginNaver");
                     apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code"
                         + "&client_id=" + clientId
                         + "&redirect_uri=" + redirectURI
@@ -101,7 +95,6 @@
                     sessionStorage.setItem("state", state);
                 } else if (server == "google") {
                     clientId = "175958294391-mhl3hcs6a4v773jnvf294d00vvqtnn2h.apps.googleusercontent.com";
-                    // redirectURI = "http://localhost:8080/AfterloginGoogle";
                     let scope = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
                     apiURL = "https://accounts.google.com/o/oauth2/v2/auth"
                         + "?client_id=" + clientId

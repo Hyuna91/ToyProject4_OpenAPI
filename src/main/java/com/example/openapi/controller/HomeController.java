@@ -18,6 +18,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
@@ -223,7 +224,10 @@ public class HomeController {
 
         // jsp 파일 가져오기
         BufferedReader reader = null;
-        String filePath = "C:\\dev\\ToyProject4_OpenAPI\\src\\main\\webapp\\WEB-INF\\views\\outFile.jsp";
+        // Youin PC
+//        String filePath = "C:\\dev\\ToyProject4_OpenAPI\\src\\main\\webapp\\WEB-INF\\views\\outFile.jsp";
+        // Home PC
+        String filePath = "C:\\Users\\장현아\\IdeaProjects\\ToyProject4_OpenAPI\\src\\main\\webapp\\WEB-INF\\views\\outFile.jsp";
         String outText = "";
 
         try {
@@ -260,18 +264,16 @@ public class HomeController {
         } catch (Exception e) {
 
         }
-        DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
 
-        ServletFileUpload fileUpload = new ServletFileUpload(diskFileItemFactory);
-
-        List<FileItem> items = fileUpload.parseRequest(request);
         res.setCharacterEncoding("UTF-8");
-        res.setContentType("text/html");
-        File uploadFile = new File(filePath);
-        log.info(uploadFile);
-//        res.write(uploadFile);
-//        res.getWriter().write(String.valueOf(sb));
+        res.setContentType("multipart/form-data");
 
+        // outFile.jsp 전송
+        FileInputStream file = new FileInputStream(filePath);
+        BufferedInputStream bis = new BufferedInputStream(file);
+        log.info(bis.toString());
+
+        bis.close();
     }
 
 

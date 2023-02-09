@@ -67,6 +67,7 @@
                         if(htmlStr != null){
                             makeList(htmlStr);
                         }
+                        console.log(typeof htmlStr);
                     },
                     error: function(xhr,status, error){
                         alert("에러발생");
